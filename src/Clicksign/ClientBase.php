@@ -52,7 +52,7 @@ abstract class ClientBase
         {
             case "GET":
                 curl_setopt($c, CURLOPT_HTTPGET, true);
-                if(count($data))
+                if($data)
                 {
                     $url .= "&" . http_build_query($data);
                 }
@@ -60,7 +60,7 @@ abstract class ClientBase
 
             case "POST":
                 curl_setopt($c, CURLOPT_POST, true);
-                if(count($data))
+                if($data)
                 {
                     curl_setopt($c, CURLOPT_POSTFIELDS, $data);
                 }
@@ -85,7 +85,6 @@ abstract class ClientBase
         curl_setopt($c, CURLOPT_URL, $url);
         curl_setopt($c, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt($c, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_setopt($c, CURLOPT_PROXY, $this->proxy);
 
         $response = curl_exec($c);
 
@@ -139,7 +138,7 @@ abstract class ClientBase
 
         if($status !== $expectedHttpCode)
         {
-            throw new ClicksignException("Expected status [$expectedHttpCode], actual status [$status], URL [$url], messages [" . implode("\n", $content) . "] ", ClicksignException::INVALID_HTTP_CODE);
+            throw new ClicksignException("Expected status [$expectedHttpCode], actual status [$status], URL [$url]", ClicksignException::INVALID_HTTP_CODE);
         }
 
         $object = json_decode(implode("\n", $content));
