@@ -87,7 +87,7 @@ abstract class ClientBase
         curl_setopt($c, CURLOPT_SSL_VERIFYPEER, 0);
 
         $response = curl_exec($c);
-        
+
         $header_size = curl_getinfo($c, CURLINFO_HEADER_SIZE);
         $header = substr($response, 0, $header_size);
         $body = substr($response, $header_size);
@@ -113,6 +113,8 @@ abstract class ClientBase
         $header = false;
         $content = array();
         $status = 200;
+
+        $response = $response[0] . $response[1];
 
         foreach(explode("\r\n", $response) as $line)
         {
