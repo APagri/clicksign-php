@@ -87,10 +87,14 @@ abstract class ClientBase
         curl_setopt($c, CURLOPT_SSL_VERIFYPEER, 0);
 
         $response = curl_exec($c);
+        
+        $header_size = curl_getinfo($c, CURLINFO_HEADER_SIZE);
+        $header = substr($response, 0, $header_size);
+        $body = substr($response, $header_size);
 
         curl_close($c);
 
-        return $response;
+        return [$header,$body];
     }
 
     public function request($url, $method, $data, $expectedHttpCode, $contentType = null)
